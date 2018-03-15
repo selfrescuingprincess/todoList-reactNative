@@ -1,13 +1,14 @@
 import React, { Component, PropTypes } from 'react'
-import { View, ScrollView, StyleSheet, TextInput, Text } from 'react-native'
+import { View, ScrollView, StyleSheet, TextInput, Text, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import { Actions } from 'react-native-router-flux'
 
 import { actionCreators } from '../redux/todoRedux'
+
 import Title from '../components/Title'
-import Input from '../components/Input'
 import List from '../components/List'
 import Footer from '../components/Footer'
+import Input from '../components/Input'
 
 const styles = StyleSheet.create({
   container: {
@@ -15,8 +16,8 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: 'whitesmoke',
-  },
+    backgroundColor: 'whitesmoke'
+  }
 })
 
 const mapStateToProps = (state) => ({
@@ -30,44 +31,45 @@ class App extends Component {
     dispatch: PropTypes.func.isRequired,
   }
 
-  addItem = (item) => {
-    const {dispatch} = this.props
-    dispatch(actionCreators.addItem(item))
+  onAddTodo = (text) => {
+    const {dispatch} = this.props;
+    dispatch(actionCreators.addItem(text));
   }
 
-  removeItem = (index) => {
-    const {dispatch} = this.props
-    dispatch(actionCreators.removeItem(index))
+  toggleItem = (i) => {
+    const {dispatch} = this.props;
+    dispatch(actionCreators.toggleItem(i));
   }
 
-  toggleItemCompleted = (index) => {
-    const {dispatch} = this.props
-    dispatch(actionCreators.toggleItemCompleted(index))
+  onRemoveTodo = (i) => {
+    const {dispatch} = this.props;
+    dispatch(actionCreators.removeItem(i));
   }
 
-  removeCompleted = () => {
-    const {dispatch} = this.props
-    dispatch(actionCreators.removeCompleted())
+  onRemoveCompleted = () => {
+    const {dispatch} = this.props;
+    dispatch(actionCreators.removeCompleted());
   }
 
   render() {
-    const {items} = this.props
+    const {items} = this.props;
 
     return (
       <View style={styles.container}>
-        <Title> Todo List </Title>
+        <Title/>
         <Input
-          placeholder={'Enter an item!'}
-          onSubmit={this.addItem}
+          placeholder={'Type a todo, then hit enter!'}
+          onSubmitEditing={this.onAddTodo}
         />
         <View style={styles.divider}/>
         <List
-          items={items}
-          onRemoveItem={this.removeItem}
-          onToggleItemCompleted={this.toggleItemCompleted}
+          list={items}
+          onToggle={this.toggleItem}
+          onRemoveItem={this.onRemoveTodo}
         />
-        <View style={styles.divider} />
-        <Footer onRemoveCompleted={this.removeCompleted} />
+        <View style={styles.divider}/>
+        <Footer
+          onRemoveCompleted={this.onRemoveCompleted}/>
       </View>
     )
   }

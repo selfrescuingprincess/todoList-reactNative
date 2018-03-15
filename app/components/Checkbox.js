@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
   inner: {
     flex: 1,
     margin: 2,
-    backgroundColor: 'rgba(0,0,0,0.8)',
-  },
+    backgroundColor: 'rgba(0,0,0,0.8)'
+  }
 })
 
 export default class Checkbox extends Component {
@@ -23,14 +23,14 @@ export default class Checkbox extends Component {
   }
 
   render() {
-    const {onToggle, isChecked} = this.props
+    const {onToggle, isChecked} = this.props;
 
     return (
       <TouchableOpacity onPress={onToggle}>
         <View style={styles.box}>
-          { isChecked && <View style={styles.inner}/> }
+          {isChecked && <View style={styles.inner}/>}
         </View>
-      </TouchableOpacity>
-    )
+      </TouchableOpacity>   
+    )  
   }
 }

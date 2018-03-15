@@ -2,72 +2,85 @@ import React, { Component, PropTypes } from 'react'
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 
 import Checkbox from './Checkbox'
+import { actionCreators } from '../redux/todoRedux'
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  list: {
+    flex: 1
   },
   item: {
-    padding: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: 'whitesmoke',
+    marginBottom: 5,
+    padding: 15
   },
-  rightSection: {
-    flexDirection: 'row',
-  },
-  removeWrapper: {
-    width: 28,
-  },
-  remove: {
-    position: 'absolute',
-    bottom: -4,
-    left: 5,
-    color: '#CD5C5C',
-    fontSize: 26,
-  },
-  completed: {
+  checkedItem: {
     backgroundColor: 'whitesmoke',
   },
-})
+  checkbox: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  removeText: {
+    color: 'red',
+    marginLeft: 10,
+    marginBottom: 2,
+    fontSize: 20
+  } 
+});
 
 export default class List extends Component {
 
+  styleCheck = (checked) => {
+    if (checked) {
+      return [styles.item, styles.checkedItem];
+    } else {
+      return styles.item;
+    }
+  }
+
   static propTypes = {
-    items: PropTypes.array.isRequired,
-    onRemoveItem: PropTypes.func.isRequired,
-    onToggleItemCompleted: PropTypes.func.isRequired,
+    list: PropTypes.array.isRequired,
+    onToggle: PropTypes.func.isRequired,
+    onRemoveItem: PropTypes.func.isRequired
   }
 
   renderItem = (item, i) => {
-    const {onToggleItemCompleted, onRemoveItem} = this.props
-    const itemStyle = item.completed ? [styles.item, styles.completed] : styles.item
+    const {text, checked} = item
+    const {onToggle} = this.props;
+    const {onRemoveItem} = this.props;
 
     return (
-      <View key={i} style={itemStyle}>
-        <Text> {item.label} </Text>
-        <View style={styles.rightSection}>
+      <View
+        key={i}
+        style={this.styleCheck(checked)}>
+        <Text>
+          {text}
+        </Text>
+        <View
+          style={styles.checkbox}>
           <Checkbox
-            isChecked={item.completed}
-            onToggle={() => onToggleItemCompleted(i)}
-          />
-          <TouchableOpacity style={styles.removeWrapper} onPress={() => onRemoveItem(i)}>
-            <Text style={styles.remove}> &times; </Text>
-          </TouchableOpacity>
+            onToggle={() => onToggle(i)}
+            isChecked={checked} />
+            <TouchableOpacity
+              onPress={() => onRemoveItem(i)}>
+              <Text
+                style={styles.removeText}>
+                X
+              </Text>
+            </TouchableOpacity>
         </View>
       </View>
     )
   }
 
-  render() {
-    const {items} = this.props
 
-    return (
-      <ScrollView style={styles.container}>
-        {items.map(this.renderItem)}
-      </ScrollView>
-    )
+
+  render() {
+    const {list} = this.props;
+    return (<View style={styles.list}>
+              {list.map(this.renderItem)}
+            </View>
+    );
   }
 }

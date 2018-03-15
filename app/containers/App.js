@@ -13,6 +13,10 @@ import Input from '../components/Input'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: 'whitesmoke'
   }
 })
 
@@ -57,11 +61,13 @@ class App extends Component {
           placeholder={'Type a todo, then hit enter!'}
           onSubmitEditing={this.onAddTodo}
         />
+        <View style={styles.divider}/>
         <List
           list={items}
           onToggle={this.toggleItem}
           onRemoveItem={this.onRemoveTodo}
         />
+        <View style={styles.divider}/>
         <Footer
           onRemoveCompleted={this.onRemoveCompleted}/>
       </View>
